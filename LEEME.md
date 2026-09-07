@@ -69,7 +69,10 @@ archivo con doble clic (`file://`): usar siempre un servidor.
   sistema). Los títulos de escena usan Playfair 800, mayúsculas.
 
 Contacto: `realismoluminico@gmail.com`. Amazon: `amazon.com/dp/B0HDJPJHCG`.
+Dominio: `diariodeunperdedor.cl` (CNAME en la raíz). `og:image` / `twitter:image`
+ya apuntan a `https://diariodeunperdedor.cl/assets/portada.jpg`.
 
 ## Qué falta antes de publicar
 
-1. Al publicar en un dominio, pasar `og:image` a URL absoluta.
+Nada pendiente de contenido. Falta activar GitHub Pages en Settings del repo
+(`Plunvago/diario-de-un-perdedor`, rama `main`, carpeta raíz).

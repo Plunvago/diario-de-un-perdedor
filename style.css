@@ -21,7 +21,7 @@
   --measure: 40rem;
   --radius: 2px;
   --pad-x: clamp(1.5rem, 6vw, 4rem);
-  --head-h: 60px;
+  --head-h: 74px;
   --band-y: clamp(5rem, 13vh, 9rem);
 
   --serif:   'Lora', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
@@ -142,7 +142,7 @@ h1, h2, h3 {
   width: 100%;
   max-width: 1160px;
   margin-inline: auto;
-  padding: 0.7rem var(--pad-x);
+  padding: 0.95rem var(--pad-x);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -168,18 +168,20 @@ h1, h2, h3 {
   font-size: 1rem;
   color: var(--gold);
 }
-.site-head__lockup { display: flex; flex-direction: column; line-height: 1.2; }
+.site-head__lockup { display: flex; flex-direction: column; gap: 0.15rem; }
 .site-head__name {
   font-family: var(--display);
   font-size: 1.15rem;
   font-weight: 600;
+  line-height: 1.35;
   letter-spacing: 0.005em;
   white-space: nowrap;
 }
 .site-head__book {
   font-family: var(--display);
   font-style: italic;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
+  line-height: 1.2;
   letter-spacing: 0.02em;
   color: var(--gold);
   white-space: nowrap;
@@ -318,8 +320,21 @@ h1, h2, h3 {
   pointer-events: none;
 }
 .hero__signature svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* En pantallas donde el título llega hasta la derecha, la firma sube sobre la
+   foto para no montarse encima del texto. */
+@media (max-width: 860px) {
+  .hero__signature {
+    bottom: 21%;
+    right: clamp(1rem, 5vw, 2rem);
+    width: clamp(135px, 22vw, 195px);
+  }
+}
 @media (max-width: 640px) {
-  .hero__signature { width: clamp(120px, 34vw, 170px); }
+  .hero__signature {
+    bottom: 24%;
+    right: clamp(0.9rem, 4vw, 1.5rem);
+    width: clamp(115px, 30vw, 155px);
+  }
 }
 
 /* Arco de color: frío/quieto -> cálido/vivo */
@@ -327,6 +342,32 @@ h1, h2, h3 {
 .duo--encuentro  { --duo-a: #8a5f18; --duo-b: #e7c078; }
 .duo--fruto      { --duo-a: #a3441a; --duo-b: #f4a83f; }
 .duo--hero       { --duo-a: #8a5f18; --duo-b: #f2cf8c; }
+
+/* Corrección del hero: menos naranja (crema neutro cálido), recuperar altas
+   luces del fondo, bajar brillo y devolver contraste al rostro.
+   Tres grados en .hero__media: .hg1 leve / .hg2 medio / .hg3 fuerte. */
+.hero__media.hg1 { --duo-a: #7b6c4d; --duo-b: #e2d3b2; }
+.hero__media.hg2 { --duo-a: #7e6b45; --duo-b: #ecdab6; }  /* elegido: cálido, integrado con la crema del sitio, sin el naranja quemado */
+.hero__media.hg3 { --duo-a: #64614f; --duo-b: #e9e1cf; }
+.hero__media.hg1 .duo__img { filter: grayscale(1) contrast(1.16) brightness(0.92); }
+.hero__media.hg2 .duo__img { filter: grayscale(1) contrast(1.18) brightness(0.89); }
+.hero__media.hg3 .duo__img { filter: grayscale(1) contrast(1.24) brightness(0.81); }
+.hero__media.hg1 .duo__tone { opacity: 0.8; }
+.hero__media.hg2 .duo__tone { opacity: 0.74; }
+.hero__media.hg3 .duo__tone { opacity: 0.48; }
+/* recorta las tablas quemadas de la derecha/arriba */
+.hero__media.hg1 .duo__shade { background:
+  linear-gradient(to top, rgba(20,13,5,0.62), rgba(20,13,5,0.08) 46%, rgba(20,13,5,0) 66%),
+  linear-gradient(to left, rgba(24,17,7,0.16), transparent 42%),
+  linear-gradient(200deg, rgba(24,17,7,0.14), transparent 34%); }
+.hero__media.hg2 .duo__shade { background:
+  linear-gradient(to top, rgba(20,13,5,0.62), rgba(20,13,5,0.08) 46%, rgba(20,13,5,0) 66%),
+  linear-gradient(to left, rgba(24,17,7,0.2), transparent 43%),
+  linear-gradient(200deg, rgba(24,17,7,0.17), transparent 35%); }
+.hero__media.hg3 .duo__shade { background:
+  linear-gradient(to top, rgba(20,13,5,0.62), rgba(20,13,5,0.08) 46%, rgba(20,13,5,0) 66%),
+  linear-gradient(to left, rgba(24,17,7,0.32), transparent 46%),
+  linear-gradient(200deg, rgba(24,17,7,0.26), transparent 38%); }
 
 /* ---------------------------------------------------------------------
    Inicio (hero) - retrato dramático a página completa, tipo duotono,
@@ -494,7 +535,26 @@ h1, h2, h3 {
   gap: clamp(2rem, 6vw, 3.5rem);
   align-items: center;
 }
-.buy__figure img { width: 100%; border-radius: var(--radius); box-shadow: 0 22px 46px -24px rgba(44, 35, 23, 0.45); }
+.buy__figure { position: relative; }
+.buy__figure img {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: 0 22px 46px -24px rgba(44, 35, 23, 0.45);
+  /* baja un punto la saturación cálida y afirma el contraste */
+  filter: saturate(0.92) contrast(1.05);
+}
+/* Vela azul-gris muy tenue: neutraliza el tinte amarillo de la portada
+   sobre el fondo crema. Ajustar la opacidad si hace falta más o menos. */
+.buy__figure::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: rgba(70, 92, 124, 0.1);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
 .buy h2 { font-size: clamp(1.7rem, 1.2rem + 2vw, 2.4rem); }
 .buy__detail { margin-top: 0.9rem; color: var(--ink-dim); font-style: italic; }
 .buy__links { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.85rem; align-items: flex-start; }
