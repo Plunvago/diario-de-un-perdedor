@@ -177,10 +177,14 @@
     var img = media.querySelector(".duo__img");
     var isHero = media.classList.contains("hero__media");
     if (isHero) {
-      gsap.fromTo(img, { yPercent: -4 }, {
-        yPercent: 12, ease: "none",
-        scrollTrigger: { trigger: media, start: "top top", end: "bottom top", scrub: true }
-      });
+      /* Parallax de scroll del hero: desplaza la imagen verticalmente. En móvil
+         eso arriesga cortar la cabeza, así que solo en pantallas amplias. */
+      if (window.matchMedia("(min-width: 781px)").matches) {
+        gsap.fromTo(img, { yPercent: -4 }, {
+          yPercent: 12, ease: "none",
+          scrollTrigger: { trigger: media, start: "top top", end: "bottom top", scrub: true }
+        });
+      }
     } else {
       gsap.fromTo(img, { yPercent: -10, scale: 1.06 }, {
         yPercent: 10, scale: 1.16, ease: "none",
@@ -196,9 +200,11 @@
     }
   });
 
-  /* Hero: Ken Burns continuo y visible (1.0 -> 1.08), después de la entrada */
+  /* Hero: Ken Burns continuo y visible (1.0 -> 1.08), después de la entrada.
+     Origen arriba: el zoom crece hacia abajo y la cabeza nunca se recorta. */
   gsap.fromTo(".hero__media .duo__img", { scale: 1.0 }, {
     scale: 1.08, duration: 9, ease: "sine.inOut", yoyo: true, repeat: -1,
+    transformOrigin: "50% 0%",
     delay: 2.1, immediateRender: false
   });
 
@@ -207,7 +213,7 @@
   var heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
   heroTl
     .from(".hero__media", { opacity: 0, duration: 1.3 })
-    .from(".hero__media .duo__img", { scale: 1.16, duration: 1.6, ease: "power2.out" }, "<")
+    .from(".hero__media .duo__img", { scale: 1.16, transformOrigin: "50% 0%", duration: 1.6, ease: "power2.out" }, "<")
     .from(".hero__title",  { opacity: 0, y: 26, duration: 0.9 }, "-=0.75")
     .from(".hero__sub",    { opacity: 0, y: 14, duration: 0.7 }, "-=0.55")
     .from(".hero__hook",   { opacity: 0, y: 14, duration: 0.7 }, "-=0.55");

@@ -380,6 +380,12 @@ h1, h2, h3 {
   margin-top: var(--head-h);
 }
 .hero__media img { object-position: 50% 8%; }
+/* En pantallas de móvil (estrechas o cortas) el recorte de cover se come la
+   cabeza. Encuadrar por el borde superior de la foto: cabeza completa y con el
+   aire de la pared por encima, a costa de recortar más los pies. */
+@media (max-width: 780px), (max-height: 640px) {
+  .hero__media img { object-position: 50% 0%; }
+}
 .hero__stack {
   position: relative;
   z-index: 2;
